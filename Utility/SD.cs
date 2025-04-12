@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Utility
 {
-    public static class Utility
+    public static class SD
     {
         public enum ApiType
         {
