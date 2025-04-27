@@ -31,9 +31,9 @@ namespace MVC.Controllers
         public async Task<IActionResult> Login(LoginRequestDto dto)
         {
             APIResponse response = await _authService.LoginAsync<APIResponse>(dto);
-            if (response != null && response.IsSuccess)
+            if (response != null)
             {
-                TokenDto model = JsonConvert.DeserializeObject<TokenDto>(Convert.ToString(response.Result));
+                TokenDto model = JsonConvert.DeserializeObject<TokenDto>(Convert.ToString(response.Data));
                 var handler = new JwtSecurityTokenHandler();
                 var jwt = handler.ReadJwtToken(model.AccessToken);
 
@@ -64,7 +64,7 @@ namespace MVC.Controllers
         public async Task<IActionResult> Register(RegisterationRequestDto dto)
         {
             var response = await _authService.RegisterAsync<APIResponse>(dto);
-            if (response != null && response.IsSuccess)
+            if (response != null)
             {
                 return RedirectToAction("Login");
             }

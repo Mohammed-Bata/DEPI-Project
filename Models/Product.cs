@@ -56,7 +56,6 @@ namespace Models
         
         public int ReviewCount { get; set; } = 0;
         public ICollection<Review> Reviews { get; set; }
-        public ICollection<ProductImage> Images { get; set; }
         [JsonIgnore]
         [IgnoreDataMember]
         public ICollection<ProductWishlist> Wishlists { get; set; }

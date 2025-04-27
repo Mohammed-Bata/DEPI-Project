@@ -1,7 +1,7 @@
 ﻿using API.DTOs;
-using API.Models;
 using DataAccess.Repository;
 using DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -12,6 +12,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AddressController : ControllerBase
     {
         private readonly IUnitofwork _unitofWork;
@@ -35,6 +36,7 @@ namespace API.Controllers
             }
 
             var Addresses = await _unitofWork.Addresses.GetAllAsync(o => o.UserId == userId);
+            
             _response.Data = Addresses;
             _response.StatusCode = HttpStatusCode.OK;
 
@@ -42,7 +44,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Address>> GetAddress(int id)
+        public async Task<ActionResult<APIResponse>> GetAddress(int id)
         {
             var address = await _unitofWork.Addresses.GetAsync(a => a.Id == id);
             if (address == null)
@@ -109,7 +111,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<APIResponse>> UpdateAddress(int id, [FromBody] AddressDto addressdto)
+        public async Task<ActionResult<APIResponse>> UpdateAddress(int id, AddressDto addressdto)
         {
             if (addressdto == null)
             {

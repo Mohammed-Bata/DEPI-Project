@@ -112,7 +112,7 @@ namespace DataAccess.Repository
                     new Claim(JwtRegisteredClaimNames.Jti, jwtTokenId),
                     new Claim(JwtRegisteredClaimNames.Aud, "TechXpressClient"),
                 }),
-                Issuer = "TechXpressAPI",
+                Issuer = "API",
                 Expires = DateTime.Now.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)), SecurityAlgorithms.HmacSha256Signature)
             };

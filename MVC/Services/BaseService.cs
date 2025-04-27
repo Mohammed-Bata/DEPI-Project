@@ -106,7 +106,7 @@ namespace MVC.Services
                 httpResponseMessage = await SendWithRefreshTokenAsync(client, messageFactory, withBearer);
                 APIResponse FinalApiResponse = new()
                 {
-                    IsSuccess = false
+                    
                 };
                 try
                 {
@@ -126,7 +126,7 @@ namespace MVC.Services
                             break;
                         default:
                             var apiContent = await httpResponseMessage.Content.ReadAsStringAsync();
-                            FinalApiResponse.IsSuccess = true;
+                            
                             FinalApiResponse = JsonConvert.DeserializeObject<APIResponse>(apiContent);
                             break;
                     }
@@ -149,7 +149,7 @@ namespace MVC.Services
                 var dto = new APIResponse
                 {
                     Errors = new List<string> { Convert.ToString(ex.Message) },
-                    IsSuccess = false
+                    
                 };
                 var res = JsonConvert.SerializeObject(dto);
                 var APIResponse = JsonConvert.DeserializeObject<T>(res);
@@ -221,7 +221,7 @@ namespace MVC.Services
             var content = await response.Content.ReadAsStringAsync();
             var apiResponse = JsonConvert.DeserializeObject<APIResponse>(content);
 
-            if (apiResponse?.IsSuccess != true)
+            if (apiResponse == null)
             {
                 await _contextAccessor.HttpContext.SignOutAsync();
                 _tokenProviderService.ClearToken();
@@ -229,7 +229,7 @@ namespace MVC.Services
             }
             else
             {
-                var tokenDataStr = JsonConvert.SerializeObject(apiResponse.Result);
+                var tokenDataStr = JsonConvert.SerializeObject(apiResponse.Data);
                 var tokenDto = JsonConvert.DeserializeObject<TokenDto>(tokenDataStr);
 
                 if (tokenDto != null && !string.IsNullOrEmpty(tokenDto.AccessToken))
