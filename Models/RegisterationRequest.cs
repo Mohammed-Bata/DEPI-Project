@@ -34,5 +34,7 @@ namespace Models
 
         [MaxLength(50)]
         public string Country { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
     }
 }

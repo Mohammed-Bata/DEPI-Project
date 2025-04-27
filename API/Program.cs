@@ -31,6 +31,9 @@ builder.Services.AddScoped<WishlistRepository>();
 builder.Services.AddScoped<ProductWishlistRepository>();
 builder.Services.AddScoped<AddressRepository>();
 builder.Services.AddScoped<DbInitializer>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");

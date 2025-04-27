@@ -8,5 +8,6 @@ namespace Models
         public List<string> Errors { get; set; }
         public object Data { get; set; }
 
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,11 @@ namespace DataAccess.Repository.IRepository
         public ProductWishlistRepository ProductWishlists { get; }
         public WishlistRepository Wishlists { get; }
         public AddressRepository Addresses { get; }
+        ICategoryRepository CategoryRepository { get; }
+        IOrderRepository Orders { get; }
+        IOrderItemRepository OrderItems { get; }
 
+        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(string userId);
         Task SaveAsync();
     }
 }
