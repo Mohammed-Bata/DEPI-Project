@@ -16,6 +16,8 @@ namespace DataAccess.Repository.IRepository
         ICategoryRepository CategoryRepository { get; }
         IOrderRepository Orders { get; }
         IOrderItemRepository OrderItems { get; }
+        public ProductRepository Products { get; }
+        ICartRepository Carts { get; }
 
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(string userId);
         Task SaveAsync();

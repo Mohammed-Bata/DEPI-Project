@@ -1,3 +1,4 @@
+using DataAccess;
 using DataAccess.DataBase;
 using DataAccess.Repository;
 using DataAccess.Repository.IRepository;
@@ -8,12 +9,15 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models;
 using System.Text;
+using Services; // Ensure this namespace is added for extension methods  
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container.  
 
 builder.Services.AddControllers();
+builder.Services.AddDataAccessServices(); 
+builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
@@ -35,7 +39,6 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 
-
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 builder.Services.AddAuthentication(x =>
 {
@@ -48,7 +51,7 @@ builder.Services.AddAuthentication(x =>
     x.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key ?? string.Empty)), // Fix for CS8604  
         ValidateIssuer = true,
         ValidIssuer = "API",
         ValidateAudience = true,
@@ -58,11 +61,10 @@ builder.Services.AddAuthentication(x =>
 });
 
 object value = builder.Services.AddControllers().AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling =
-        Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+   options.SerializerSettings.ReferenceLoopHandling =
+       Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle  
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -77,30 +79,28 @@ builder.Services.AddSwaggerGen(options =>
         In = ParameterLocation.Header,
         Name = "Authorization",
         Description = "Please enter into field the word 'Bearer' followed by a space and the JWT value",
-        // BearerFormat = "JWT",
-        // Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
+   {
+       {
+           new OpenApiSecurityScheme
+           {
+               Reference = new OpenApiReference
+               {
+                   Type = ReferenceType.SecurityScheme,
+                   Id = "Bearer"
+               }
+           },
+           new string[] {}
+       }
+   });
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline.  
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

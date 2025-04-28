@@ -23,6 +23,6 @@ namespace Models
 
         public ICollection<Address> Addresses { get; set; }
 
-        public ShoppingCart ShoppingCart { get; set; }
+        public Cart ShoppingCart { get; set; }
     }
 }

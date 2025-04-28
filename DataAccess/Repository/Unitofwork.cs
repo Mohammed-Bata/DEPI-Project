@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
-    public class UnitofWork:IUnitofwork
+    public class UnitofWork : IUnitofwork
     {
         private readonly AppDbContext _context;
 
@@ -20,9 +20,11 @@ namespace DataAccess.Repository
         public ICategoryRepository CategoryRepository { get; private set; }
         public IOrderRepository Orders { get; private set; }
         public IOrderItemRepository OrderItems { get; private set; }
+        public ProductRepository Products { get; set; }
+        public ICartRepository Carts { get; private set; }
 
-        public UnitofWork(AppDbContext context, AppUserRepository appUserRepository, ProductWishlistRepository productWishlistRepository, WishlistRepository wishlistRepository, AddressRepository addressRepository,IOrderRepository orderRepository,
-			ICategoryRepository categoryRepository)
+        public UnitofWork(AppDbContext context, AppUserRepository appUserRepository, ProductWishlistRepository productWishlistRepository, WishlistRepository wishlistRepository, AddressRepository addressRepository, IOrderRepository orderRepository,
+            ICategoryRepository categoryRepository, ICartRepository carts,ProductRepository productRepository)
         {
             _context = context;
             AppUsers = appUserRepository;
@@ -31,12 +33,15 @@ namespace DataAccess.Repository
             Addresses = addressRepository;
             Orders = orderRepository;
             CategoryRepository = categoryRepository;
+            Products = productRepository;
+            Carts = carts;
         }
 
         public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(string userId)
         {
             return await Orders.GetOrdersByUserIdAsync(userId);
         }
+
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
