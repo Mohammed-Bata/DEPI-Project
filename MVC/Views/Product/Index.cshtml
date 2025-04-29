@@ -1,0 +1,22 @@
+﻿@* @model List<Product>
+
+<h2>Product list</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>review</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td><a asp-action="Reviews" asp-route-id="@item.Id">Review List</a></td>
+            </tr>
+        }
+    </tbody>
+</table> *@

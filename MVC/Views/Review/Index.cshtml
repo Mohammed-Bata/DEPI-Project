@@ -1,0 +1,21 @@
+﻿@* 
+@model Product
+
+<h2>Review For: @Model.Name</h2>
+
+@if (Model.Reviews == null || !Model.Reviews.Any())
+{
+    <p>Not Found Reviews</p>
+}
+else
+{
+    <ul>
+        @foreach (var r in Model.Reviews)
+        {
+            <li>
+                <strong>Rating:</strong> @r.Rating<br />
+                <strong>Comment:</strong> @r.Content
+            </li>
+        }
+    </ul>
+} *@
