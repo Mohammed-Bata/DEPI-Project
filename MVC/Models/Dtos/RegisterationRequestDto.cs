@@ -21,9 +21,8 @@ namespace MVC.Models.Dtos
         [Required(ErrorMessage = "Username is required.")]
         public string UserName { get; set; }
 
-        [Required(ErrorMessage = "Password is required.")]
-        [MaxLength(50)]
         [DataType(DataType.Password)]
+        [PasswordValidation]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Confirm password is required.")]

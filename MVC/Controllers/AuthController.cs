@@ -63,12 +63,19 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterationRequestDto dto)
         {
-            var response = await _authService.RegisterAsync<APIResponse>(dto);
-            if (response != null)
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return View(dto);
+            }
+                var response = await _authService.RegisterAsync<APIResponse>(dto);
+            if (response != null && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return RedirectToAction("Login");
             }
-            return View();
+            
+            
+                return View();
         }
         public async Task<IActionResult> Logout()
         {

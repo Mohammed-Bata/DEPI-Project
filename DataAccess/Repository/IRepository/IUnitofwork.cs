@@ -18,6 +18,7 @@ namespace DataAccess.Repository.IRepository
         IOrderItemRepository OrderItems { get; }
         public ProductRepository Products { get; }
         ICartRepository Carts { get; }
+        public ReviewRepository Reviews { get; }
 
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(string userId);
         Task SaveAsync();

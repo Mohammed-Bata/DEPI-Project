@@ -15,6 +15,7 @@ namespace DataAccess
         {
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<ProductRepository>();
+            services.AddScoped<ReviewRepository>();
 
             return services;
         }

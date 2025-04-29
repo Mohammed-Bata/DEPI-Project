@@ -22,9 +22,10 @@ namespace DataAccess.Repository
         public IOrderItemRepository OrderItems { get; private set; }
         public ProductRepository Products { get; set; }
         public ICartRepository Carts { get; private set; }
+        public ReviewRepository Reviews { get; private set; }
 
         public UnitofWork(AppDbContext context, AppUserRepository appUserRepository, ProductWishlistRepository productWishlistRepository, WishlistRepository wishlistRepository, AddressRepository addressRepository, IOrderRepository orderRepository,
-            ICategoryRepository categoryRepository, ICartRepository carts,ProductRepository productRepository)
+            ICategoryRepository categoryRepository, ICartRepository carts,ProductRepository productRepository, ReviewRepository reviews)
         {
             _context = context;
             AppUsers = appUserRepository;
@@ -35,6 +36,7 @@ namespace DataAccess.Repository
             CategoryRepository = categoryRepository;
             Products = productRepository;
             Carts = carts;
+            Reviews = reviews;
         }
 
         public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(string userId)

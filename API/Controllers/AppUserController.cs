@@ -31,6 +31,7 @@ namespace API.Controllers
                 return BadRequest(_response);
             }
 
+
             var user = await _userRepo.Register(model);
             if (user == null)
             {
