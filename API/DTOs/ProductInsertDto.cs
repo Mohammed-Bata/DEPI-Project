@@ -42,7 +42,7 @@ namespace API.DTOs
         [FromForm]
         public IFormFile ImageUrl { get; set; }
 
-        public string ImageLocalPath { get; set; }
+        //public string ImageLocalPath { get; set; }
 
         [MaxLength(50)]
         [Required]
