@@ -36,6 +36,7 @@ namespace DataAccess.DataBase
 
             builder.Entity<ProductWishlist>()
                 .HasKey(pw => new { pw.ProductId, pw.WishlistId });
+            builder.Entity<Product>().ToTable("Products");
         }
     }
 }

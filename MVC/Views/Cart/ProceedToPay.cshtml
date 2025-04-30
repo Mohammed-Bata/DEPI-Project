@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "Checkout";
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="container mt-5">
+    <h2 class="mb-4">Checkout</h2>
+
+    <div class="card p-4 shadow-sm">
+        <div class="form-group">
+            <label><strong>Select Payment Method:</strong></label><br>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="cardOption" value="card" checked>
+                <label class="form-check-label" for="cardOption">Credit/Debit Card (Stripe)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="paymentMethod" id="codOption" value="cod">
+                <label class="form-check-label" for="codOption">Cash on Delivery</label>
+            </div>
+        </div>
+
+        <div id="card-element-container" class="mb-3">
+            <label for="card-element">Card Details</label>
+            <div id="card-element" class="form-control"></div>
+            <div id="card-errors" class="text-danger mt-2"></div>
+        </div>
+
+        <div id="loading" class="text-info mb-2" style="display:none;">Processing...</div>
+        <div id="payment-result" class="mb-3"></div>
+
+        <button id="pay-button" class="btn btn-primary">Pay</button>
+    </div>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe("pk_test_51RBxStQuh8CKitqm67vIerOI7jBKtrUzJ9VJjYYhJshSjLqJkd2jVVfA2S8D4IpU9CvOMXikCuPZ6OmkcAdD6xbh00Jv06jqJg");
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    card.mount("#card-element");
+
+    card.on('change', function (event) {
+        document.getElementById('card-errors').textContent = event.error ? event.error.message : '';
+    });
+
+    const cardContainer = document.getElementById('card-element-container');
+
+    document.querySelectorAll('input[name="paymentMethod"]').forEach((input) => {
+        input.addEventListener('change', () => {
+            cardContainer.style.display = document.getElementById('cardOption').checked ? 'block' : 'none';
+        });
+    });
+
+    document.getElementById("pay-button").addEventListener("click", async function () {
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        const amount = @ViewBag.CartTotal;
+        const payButton = document.getElementById("pay-button");
+        const loading = document.getElementById("loading");
+        const resultDiv = document.getElementById("payment-result");
+
+        if (isNaN(amount) || amount <= 0 || amount > 1000000) {
+            alert("Invalid amount.");
+            return;
+        }
+
+        payButton.disabled = true;
+        loading.style.display = 'block';
+
+        if (paymentMethod === "card") {
+            const response = await fetch(`/Payment/CreatePaymentIntent?amount=${amount}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            const clientSecret = data.clientSecret;
+
+            const result = await stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: card,
+                    billing_details: {
+                        name: "Test User"
+                    }
+                }
+            });
+
+            loading.style.display = 'none';
+            payButton.disabled = false;
+
+            if (result.error) {
+                resultDiv.innerHTML = `<div class="alert alert-danger">❌ ${result.error.message}</div>`;
+            } else if (result.paymentIntent.status === "succeeded") {
+                resultDiv.innerHTML = `<div class="alert alert-success">✅ Payment succeeded!</div>`;
+            }
+        } else if (paymentMethod === "cod") {
+            loading.style.display = 'none';
+            payButton.disabled = false;
+            resultDiv.innerHTML = `<div class="alert alert-success">✅ Order placed with Cash on Delivery.</div>`;
+        } else if (paymentMethod === "paypal") {
+            loading.style.display = 'none';
+            payButton.disabled = false;
+            resultDiv.innerHTML = `<div class="alert alert-info">🔗 Redirecting to PayPal (not implemented)...</div>`;
+            // Optionally: window.location.href = "/paypal/checkout";
+        }
+    });
+</script>

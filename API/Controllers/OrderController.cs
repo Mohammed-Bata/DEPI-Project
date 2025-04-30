@@ -58,5 +58,27 @@ namespace API.Controllers
 			return Ok(_response);
 		}
 
+		//[HttpGet]
+		//public async Task<ActionResult<APIResponse>> AddOrder(string paymentIntentId)
+		//{
+		//	var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+		//	var addressId = _unitOfWork.Addresses.GetAsync(o => o.UserId == userId);
+		//	if (userId == null)
+		//	{
+		//		_response.StatusCode = HttpStatusCode.Unauthorized;
+		//		_response.Errors = new List<string> { "User not authorized" };
+		//		return Unauthorized(_response);
+		//	}
+
+		//	//var orders = await _unitOfWork.Orders.GetOrdersByUserIdAsync(userId);
+		//	await _unitOfWork.Orders.CreateAsync(new Order { 
+		//		AddressId = 1,
+		//		OrderDate = DateTime.Now,
+		//		PaymentIntentId = paymentIntentId
+		//	});
+		//	_response.StatusCode = HttpStatusCode.OK;
+		//	return Ok(_response);
+		//}
+
 	}
 }

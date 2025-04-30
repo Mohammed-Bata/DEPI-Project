@@ -1,0 +1,113 @@
+﻿@model Services.DTOs.CartDto
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<section class="h-100">
+    <div class="container h-100 py-2">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-normal mb-0">Shopping Cart</h3>
+
+                    <!-- Delete All Button next to the Shopping Cart Heading -->
+                    @if (Model != null && Model.Items.Any())
+                    {
+                            <form asp-action="Clear" method="post" class="m-0">
+                                <button type="submit" class="btn btn-warning text-light btn-sm">
+                                    Delete All
+                                </button>
+                            </form>
+                    }
+                </div>
+
+                @if (Model != null && Model.Items.Any())
+                {
+                    @foreach (var item in Model.Items)
+                    {
+                                <div class="card rounded-3 mb-4">
+                                    <div class="card-body p-4">
+                                        <div class="row d-flex justify-content-between align-items-center">
+                                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img1.webp"
+                                                     class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                            </div>
+                                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                                <p class="lead fw-normal mb-2">@item.Product.Name</p>
+                                                <p>@item.Product.Price EGP</p>
+                                            </div>
+                                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                <form asp-action="Update" method="post" class="m-0">
+                                                    <input type="hidden" name="cartItemId" value="@item.Id" />
+                                                    <input type="hidden" name="newQuantity" value="@(item.Quantity - 1)" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary"
+                                            @(item.Quantity <= 1 ? "disabled" : "")>
+                                                        -
+                                                    </button>
+                                                </form>
+
+                                                <span class="px-2 fw-bold">@item.Quantity</span>
+
+                                                <form asp-action="Update" method="post" class="m-0">
+                                                    <input type="hidden" name="cartItemId" value="@item.Id" />
+                                                    <input type="hidden" name="newQuantity" value="@(item.Quantity + 1)" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary" title="Update quantity"
+                                            @(item.Quantity >= item.Product.StockAmount ? "disabled" : "")>
+                                                        +
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                <h5 class="mb-0">@item.TotalPrice EGP</h5>
+                                            </div>
+                                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                <form asp-action="RemoveItem" method="post" class="m-0">
+                                                    <input type="hidden" name="cartItemId" value="@item.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Remove item">
+                                                        <i class="bi bi-trash-fill"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                    }
+
+                        <div class="card mb-4">
+                            <div class="card-body d-flex flex-row">
+                                <div data-mdb-input-init class="form-outline flex-fill">
+                                    <input type="text" id="form1" class="form-control form-control-lg" placeholder="Discount code" />
+                                </div>
+                                <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-warning btn-lg ms-3">Apply</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                            <form asp-action="ProceedToPay" method="get">
+                                <button type="submit" class="btn btn-warning btn-block btn-lg w-100">
+                                    <div class="d-flex justify-content-between align-items-center text-light">
+                                        <h5 class="fw-normal mb-0">Proceed to Pay</h5>
+                                        <h6 class="fw-normal mb-0">@Model.TotalPrice EGP</h6>
+                                    </div>
+                                </button>
+                            </form>
+                            </div>
+                        </div>
+                }
+                else
+                {
+                        <div class="alert alert-info">
+                            <i class="bi bi-cart-x"></i> Your cart is empty.
+                        </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+

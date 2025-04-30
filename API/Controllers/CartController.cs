@@ -11,7 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[Controller]/[Action]")]
     [ApiController]
-    //[Authorize]
+    [Authorize(Roles = "Customer")]
     public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
@@ -23,7 +23,7 @@ namespace API.Controllers
 
         // Get the user's cart
         [HttpGet]
-        public async Task<IActionResult> GetCartAsync(string userId)
+        public async Task<IActionResult> GetCart(string userId)
         {
             var cart = await _cartService.GetCartAsync(userId);
             if (cart == null)
@@ -43,7 +43,7 @@ namespace API.Controllers
 
         // Add an item to the cart (productId, quantity)
         [HttpPost]
-        public async Task<IActionResult> AddItemToCartAsync(string userId, CartDto data)
+        public async Task<IActionResult> AddItemToCart(string userId, [FromBody] CartDto data)
         {
             if (data.Quantity <= 0)
             {
@@ -73,11 +73,11 @@ namespace API.Controllers
 
         // Remove an item from the cart
         [HttpDelete]
-        public async Task<IActionResult> RemoveItemFromCartAsync(RemoveCartItemDto data)
+        public async Task<IActionResult> RemoveItemFromCart(int cartItemId)
         {
             try
             {
-                await _cartService.RemoveItemAsync(data.ItemId);
+                await _cartService.RemoveItemAsync(cartItemId);
                 return Ok(new APIResponse
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -91,12 +91,12 @@ namespace API.Controllers
                     Errors = new List<string> { ex.Message }
                 });
             }
-            
+
         }
 
         // Update item quantity (cartItemId, quantity)
         [HttpPut]
-        public async Task<IActionResult> UpdateQuantity(CartDto data)
+        public async Task<IActionResult> UpdateQuantity([FromBody] CartDto data)
         {
             if (data.Quantity <= 0)
             {
@@ -127,7 +127,7 @@ namespace API.Controllers
 
         // Clear all items in the user's cart
         [HttpDelete]
-        public async Task<IActionResult> ClearCartAsync(string userId)
+        public async Task<IActionResult> ClearCart(string userId)
         {
             try
             {

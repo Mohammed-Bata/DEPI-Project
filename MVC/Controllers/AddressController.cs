@@ -40,11 +40,13 @@ namespace MVC.Controllers
             var response = await _addressService.CreateAsync<APIResponse>(dto);
             if (response != null)
             {
+                TempData["success"] = "Address Created successfully";
                 return RedirectToAction(nameof(Index));
             }
             else
             {
                 ModelState.AddModelError("CustomError", response.Errors.FirstOrDefault());
+                TempData["error"] = "Error encountered.";
                 return View(dto);
             }
         }

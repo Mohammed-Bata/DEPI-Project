@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 
 namespace Models
 {
+    [Table("Products")]
     public class Product
     {
         [Key]

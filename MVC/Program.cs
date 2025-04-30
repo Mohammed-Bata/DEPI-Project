@@ -9,6 +9,8 @@ builder.Services.AddHttpClient<AuthService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddHttpClient<AddressService>();
 builder.Services.AddScoped<AddressService>();
+builder.Services.AddHttpClient<CartService>();
+builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<TokenProviderService>();
 builder.Services.AddScoped<BaseService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

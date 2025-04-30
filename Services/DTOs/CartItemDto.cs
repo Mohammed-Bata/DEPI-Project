@@ -11,6 +11,7 @@ namespace Services.DTOs
     {
         public int Id { get; set; }
         public int Quantity { get; set; }
+        public decimal TotalPrice { get; set; }
         public virtual ProductDto Product { get; set; }
     }
 }
