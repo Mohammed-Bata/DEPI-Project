@@ -1,21 +1,41 @@
 ﻿@model List<Product>
-
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <h2>Product list</h2>
 <table class="table">
     <thead>
         <tr>
             <th>Name</th>
             <th>Price</th>
-            <th>review</th>
+			<th>Description</th>
+			<th>Stock Amount</th>
+            <th>Image</th>
+			<th>Wishlist</th>
+			
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
+            
             <tr>
                 <td>@item.Name</td>
                 <td>@item.Price</td>
-                <td><a asp-action="Reviews" asp-route-id="@item.Id">Review List</a></td>
+                <td>@item.Description</td>
+                <td>@item.StockAmount</td>
+
+                <td>
+                    <img src="~/images/@item.ImageLocalPath" alt="Product Image" style="width:150px;" />
+                </td>
+                <td>
+					<form method="post" asp-controller="Wishlist" asp-action="AddToWishlist">
+						<input type="hidden" name="productId" value="@item.Id" />
+						<button type="submit">Add to Wishlist</button>
+					</form>
+					@* <a asp-controller="Wishlist" asp-action="AddToWishlist" asp-route-id="@item.Id">Wishlist</a> *@
+				</td>
+                                
             </tr>
         }
     </tbody>

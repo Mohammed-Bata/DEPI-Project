@@ -47,8 +47,8 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult<APIResponse>> AddToWishlist(int productId)
+        [HttpPost("{id}")]
+        public async Task<ActionResult<APIResponse>> AddToWishlist(int id)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace API.Controllers
                     return BadRequest(_response);
                 }
 
-                bool Added = await _unitOfWork.Wishlists.AddProductToWishlist(productId, userId);
+                bool Added = await _unitOfWork.Wishlists.AddProductToWishlist(id, userId);
 
                 _response.Data = Added;
                 _response.StatusCode = HttpStatusCode.OK;
@@ -76,8 +76,8 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete]
-        public async Task<ActionResult<APIResponse>> RemoveWishlistProduct(int productId)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<APIResponse>> RemoveWishlistProduct(int id)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace API.Controllers
                     return BadRequest(_response);
                 }
 
-                bool Removed = await _unitOfWork.Wishlists.RemoveFromWishlist(productId, userId);
+                bool Removed = await _unitOfWork.Wishlists.RemoveFromWishlist(id, userId);
 
                 _response.Data = Removed;
                 _response.StatusCode = HttpStatusCode.OK;

@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Utility\Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\images\iphone.jpg" />
+  </ItemGroup>
+
 </Project>
